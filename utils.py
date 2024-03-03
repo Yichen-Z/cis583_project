@@ -1,3 +1,8 @@
+"""
+Useful functions to be used in Notebooks and other scripts as needed. 
+For now, still retains the image-related functions from the first project idea.
+"""
+
 import numpy as np
 import os
 from PIL import Image
