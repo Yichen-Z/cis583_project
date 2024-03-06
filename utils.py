@@ -121,6 +121,16 @@ def get_classification_report(model, features, target, plot_title) -> None:
     print(classification_report(y_pred, target))
 
 
+def get_epoch_graphs(history, metric):
+    """From TensorFlow tutorial"""
+    plt.plot(history.history[metric])
+    plt.plot(history.history[f'val_{metric}'], '')
+    plt.xlabel('Epochs')
+    plt.ylabel(metric)
+    plt.legend([metric, f'val_{metric}'])
+    plt.show()
+
+
 # Image Manipulation
 def list_images(basePath, contains=None):
     # return the set of files that are valid
