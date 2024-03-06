@@ -53,6 +53,12 @@ def save_feather(raw_df: pd.DataFrame, save_path: str):
 
 
 # Text Processing
+def add_stopwords_missing_apostrophe(old_stopwords: list) -> None:
+    for word in old_stopwords:
+        if "'" in word:
+            old_stopwords.append(re.sub("'", "", word))
+
+            
 def process_text(text_chunk: str, stopwords: set, lemmatizer_obj: WordNetLemmatizer) -> str:
     """Removes everything but alphanumeric characters and stopwords. Lowercases all letters."""
     try:
