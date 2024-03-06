@@ -53,6 +53,12 @@ def save_feather(raw_df: pd.DataFrame, save_path: str):
 
 
 # Text Processing
+def add_stopwords_missing_apostrophe(old_stopwords: list) -> None:
+    for word in old_stopwords:
+        if "'" in word:
+            old_stopwords.append(re.sub("'", "", word))
+
+            
 def process_text(text_chunk: str, stopwords: set, lemmatizer_obj: WordNetLemmatizer) -> str:
     """Removes everything but alphanumeric characters and stopwords. Lowercases all letters."""
     try:
@@ -113,6 +119,16 @@ def get_classification_report(model, features, target, plot_title) -> None:
     y_pred = model.predict(features)
     get_confusion_matrix(predictions=y_pred, test_target=target, plot_name=plot_title)
     print(classification_report(y_pred, target))
+
+
+def get_epoch_graphs(history, metric):
+    """From TensorFlow tutorial"""
+    plt.plot(history.history[metric])
+    plt.plot(history.history[f'val_{metric}'], '')
+    plt.xlabel('Epochs')
+    plt.ylabel(metric)
+    plt.legend([metric, f'val_{metric}'])
+    plt.show()
 
 
 # Image Manipulation
