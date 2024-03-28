@@ -18,10 +18,22 @@ Before making changes to any existing files:
 
 0) Ensure conda is installed (see [documentation](https://conda.io/projects/conda/en/latest/user-guide/install/index.html))
 1) Open a terminal
+
+### Method 1: Conda Env from Scratch
+2) Enter the following into the terminal:
+    `conda create -n cis583_env python=3.10 ipykernel ipython joblib matplotlib nltk pandas scikit-learn scipy spacy seaborn tensorflow tensorboard`
+3) When prompted, type in 'y' or 'yes' to confirm the packages to be installed.
+
+### Method 2: Conda Env from Yaml
 2) Ensure terminal is at this repository's root level. `ls` should reveal environment.yml
-3) Enter the following into the terminal: 
+3) Enter the following into the terminal, and type in 'y' to confirm installation as needed: 
     `conda env create -f environment.yml`
 
+Once conda installs all packages, regardless of the method you went with, check that it worked:
+4) Open a Jupyter Notebook file (.ipynb). In Visual Studio Code, at the upper right-hand corner, click "Select Kernel."
+5) Select "From Python environment" and cis583_env (or however you chose to name the environment) should now be available to select.
+6) Once the kernel is chosen and now shows at the Notebook's upper right corner, run Notebook cells to confirm kernel is working properly and has all necessary packages. 
+7) If any packages are missing, or further packages are needed, return to the terminal and type: `conda activate cis583_env` (or the name you chose) then  `conda install <package1> <package2>`
 
 ## GitHub Token Setup
 
