@@ -181,7 +181,7 @@ def load_images(directory='', size=(64,64)):
 # Function to plot confusion matrix
 def plot_confusion_matrix(y_true, y_pred, classes,
                           normalize=False,
-                          title=None,
+                          title='',
                           cmap=plt.cm.Blues):
     """
     This function prints and plots the confusion matrix.
