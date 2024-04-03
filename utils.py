@@ -18,7 +18,7 @@ from urllib.parse import urlparse
 
 
 # Pandas dataframe helper functions
-def get_slimmer_numerics(raw_df: pd.DataFrame, subset_cols: list = None) -> None:
+def get_slimmer_numerics(raw_df: pd.DataFrame, subset_cols: list = None) -> pd.DataFrame:
     """Downcast int64 and float64 columns to save space. Adapted from https://stackoverflow.com/questions/57531388/how-can-i-reduce-the-memory-of-a-pandas-dataframe"""
     cols = subset_cols if subset_cols is not None else raw_df.columns.tolist()
     for col in cols:
@@ -36,6 +36,7 @@ def get_slimmer_numerics(raw_df: pd.DataFrame, subset_cols: list = None) -> None
             else:
                 if c_min > np.iinfo(np.float32).min and c_max < np.iinfo(np.float32).max:
                     raw_df[col] = raw_df[col].astype(np.float32)
+    return raw_df
 
 
 def load_feather(file_name: str, drop_col: str = 'index') -> pd.DataFrame:
@@ -53,10 +54,12 @@ def save_feather(raw_df: pd.DataFrame, save_path: str):
 
 
 # Text Processing
-def add_stopwords_missing_apostrophe(old_stopwords: list) -> None:
-    for word in old_stopwords:
+def add_stopwords_missing_apostrophe() -> list:
+    stop_words = stopwords.words('english')
+    for word in stop_words:
         if "'" in word:
-            old_stopwords.append(re.sub("'", "", word))
+            stop_words.append(re.sub("'", "", word))
+    return stop_words
 
             
 def process_text(text_chunk: str, stopwords: set, lemmatizer_obj: WordNetLemmatizer) -> str:
@@ -129,53 +132,6 @@ def get_epoch_graphs(history, metric):
     plt.ylabel(metric)
     plt.legend([metric, f'val_{metric}'])
     plt.show()
-
-
-# Image Manipulation
-def list_images(basePath, contains=None):
-    # return the set of files that are valid
-    return list_files(basePath, validExts=(".jpg", ".jpeg", ".png", ".bmp"), contains=contains)
-
-
-def list_files(basePath, validExts=(".jpg", ".jpeg", ".png", ".bmp"), contains=None):
-    # loop over the directory structure
-    for (rootDir, dirNames, filenames) in os.walk(basePath):
-        # loop over the filenames in the current directory
-        for filename in filenames:
-            # if the contains string is not none and the filename does not contain
-            # the supplied string, then ignore the file
-            if contains is not None and filename.find(contains) == -1:
-                continue
-
-            # determine the file extension of the current file
-            ext = filename[filename.rfind("."):].lower()
-
-            # check to see if the file is an image and should be processed
-            if ext.endswith(validExts):
-                # construct the path to the image and yield it
-                imagePath = os.path.join(rootDir, filename).replace(" ", "\\ ")
-                yield imagePath
-
-
-def load_images(directory='', size=(64,64)):
-    images = []
-    labels = []  # Integers corresponding to the categories in alphabetical order
-    label = 0
-    
-    imagePaths = list(list_images(directory))
-    
-    for path in imagePaths:
-        
-        if not('OSX' in path):
-        
-            path = path.replace('\\','/')
-
-            image = Image.open(path) # Read image in
-            image = np.array(image.resize(size)) # Resize and convert to array of shape (64, 64, 3)
-
-            images.append(image)
-    
-    return images
 
 
 # Function to plot confusion matrix
